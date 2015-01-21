@@ -1,0 +1,5 @@
+syntax: glob
+.cabal-sandbox/*
+cabal.sandbox.config
+dist/*
+
