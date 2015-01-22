@@ -1,20 +1,24 @@
 module Main where
 
-import Control.Monad (void)
-import Data.Default (def)
-import qualified Graphics.UI.Threepenny as UI
-import Graphics.UI.Threepenny.Core
+import           Control.Monad               (void)
+import           Data.Default                (def)
+import qualified Graphics.UI.Threepenny      as UI
+import           Graphics.UI.Threepenny      (set, attr, title, text, value,
+                                              (#), (#+), (<@),
+                                              Event, Element, UI, Window,
+                                              sink, accumB)
+import           Graphics.UI.Threepenny.Core (startGUI, defaultConfig)
 
-import Reactive.Threepenny ()
+--import           Reactive.Threepenny         ()
 
-import Calc
+import           Calc
 
 main :: IO ()
 main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup win = void $ do
-  return win # set title "ReaCalc"
+  return win # set UI.title "ReaCalc"
 
   out <- UI.input # set (attr "readonly") "true"
                   # set (attr "style") "text-align: right; min-width: 240px"
@@ -27,8 +31,8 @@ setup win = void $ do
   calcBehaviour <- accumB (def :: State) commands
   return out # sink value (fmap display calcBehaviour)
 
-  getBody win #+ [return out]
-              #+ map UI.row (map (map return) buttons)
+  UI.getBody win #+ [return out]
+                 #+ map UI.row (map (map return) buttons)
 
   where
     mkButton s = UI.input # set text s
@@ -37,10 +41,10 @@ setup win = void $ do
                           # set (attr "style") "min-width: 50px"
 
     buttonClicks :: [(Element, String)] -> Event String
-    buttonClicks = foldr1 (unionWith (++)) . map makeClick
+    buttonClicks = foldr1 (UI.unionWith (++)) . map makeClick
       where
         makeClick :: (Element, String) -> Event String
-        makeClick (e, s) = (pure s) <@ (UI.click e)
+        makeClick (e, s) = (UI.pure s) <@ (UI.click e)
 
 
 buttonLabels :: [[String]]
