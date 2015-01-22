@@ -16,7 +16,7 @@ main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup win = void $ do
-  return win # set UI.title "ReaCalc"
+  return win # set title "ReaCalc"
 
   out <- UI.input # set (attr "readonly") "true"
                   # set (attr "style") "text-align: right; min-width: 240px"
