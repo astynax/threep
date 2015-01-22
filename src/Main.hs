@@ -9,8 +9,6 @@ import           Graphics.UI.Threepenny      (set, attr, title, text, value,
                                               sink, accumB)
 import           Graphics.UI.Threepenny.Core (startGUI, defaultConfig)
 
---import           Reactive.Threepenny         ()
-
 import           Calc
 
 main :: IO ()

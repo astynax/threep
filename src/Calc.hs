@@ -1,8 +1,7 @@
-module Calc (
-  State(), populate, display
-  ) where
+module Calc (State(),
+             populate, display) where
 
-import Data.Default (Default(def))
+import           Data.Default (Default (def))
 
 data Operation = Add | Sub | Mul | Div deriving (Show, Eq)
 
