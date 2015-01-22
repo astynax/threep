@@ -20,7 +20,7 @@ setup win = void $ do
 
   out <- UI.input # set (attr "readonly") "true"
                   # set (attr "style") "text-align: right; min-width: 240px"
-                  # set UI.value "0"
+                  # set value "0"
 
   buttons <- mapM (mapM mkButton) buttonLabels
 
@@ -39,9 +39,8 @@ setup win = void $ do
                           # set (attr "style") "min-width: 50px"
 
     buttonClicks :: [(Element, String)] -> Event String
-    buttonClicks = foldr1 (UI.unionWith (++)) . map makeClick
+    buttonClicks = foldr1 (UI.unionWith const) . map makeClick
       where
-        makeClick :: (Element, String) -> Event String
         makeClick (e, s) = (UI.pure s) <@ (UI.click e)
 
 
