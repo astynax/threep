@@ -1,10 +1,10 @@
-# Threepenny-GUI demo
+# threep
 
-Building:
+**threep** — a simple Web-GUI powered "desktop calculator" made using Haskell and [threepenny-gui](https://hackage.haskell.org/package/threepenny-gui) toolkit. Projects intended to be an example of how to use Threepenny-GUI.
+
+### Howto
 
 ```shell
-$ cabal sandbox init
-$ cabal install --dependencies-only
-$ cabal run
+$ cabal new-build
+$ cabal new-run threep
 ```
-
