@@ -42,27 +42,29 @@ asRaw :: Float -> Raw
 asRaw x = (x, x /= (fromInteger . truncate) x)
 
 
-parseInput :: String -> Command
-parseInput (x:_) | x `elem` "0123456789" = Digit x
+parseInput :: String -> Maybe Command
+parseInput (x:_) | x `elem` "0123456789" = Just $ Digit x
 parseInput x =
   case x of
-    "."  -> Dot
-    "+"  -> Operation Add
-    "-"  -> Operation Sub
-    "*"  -> Operation Mul
-    "/"  -> Operation Div
-    "="  -> Flush
-    "C"  -> Clear
-    "CE" -> ClearError
+    "."  -> Just Dot
+    "+"  -> Just (Operation Add)
+    "-"  -> Just (Operation Sub)
+    "*"  -> Just (Operation Mul)
+    "/"  -> Just (Operation Div)
+    "="  -> Just Flush
+    "C"  -> Just Clear
+    "CE" -> Just ClearError
+    _    -> Nothing
 
 
 populate :: String -> State -> State
 populate i =
   case parseInput i of
-    Digit x      -> addDigit x
-    Dot          -> addDot
-    Operation op -> applyOp op
-    cmd          -> applyCmd cmd
+    Just (Digit x)      -> addDigit x
+    Just Dot            -> addDot
+    Just (Operation op) -> applyOp op
+    Just cmd            -> applyCmd cmd
+    Nothing             -> id
 
 
 addDigit :: Char -> State -> State
@@ -75,9 +77,10 @@ addDigit x s =
     _                    -> s
   where
     update (a, False) = (a * 10 + x', False)
-    update (a, True)  = let (a', b) = properFraction a
-                        in (fromInteger a' + (x' + b / 10) / 10, True)
-
+    update (a, True)  =
+      let (a', b) = properFraction a
+      in (fromInteger a' + (x' + b / 10) / 10, True)
+      --  ^ FIXME: add digits to the fractional part properly!
     x' = read (x:[]) :: Float
 
 

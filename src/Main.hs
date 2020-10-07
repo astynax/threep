@@ -16,27 +16,31 @@ main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup win = void $ do
-  return win # set title "ReaCalc"
+  void $ pure win
+    # set title "ReaCalc"
 
-  out <- UI.input # set (attr "readonly") "true"
-                  # set (attr "style") "text-align: right; min-width: 240px"
-                  # set value "0"
+  out <- UI.input
+    # set (attr "readonly") "true"
+    # set (attr "style") "text-align: right; min-width: 240px"
+    # set value "0"
 
   buttons <- mapM (mapM mkButton) buttonLabels
 
   let clicks = buttonClicks (zip (concat buttons) (concat buttonLabels))
-      commands = fmap populate clicks
+  let commands = fmap populate clicks
   calcBehaviour <- accumB (def :: State) commands
-  return out # sink value (fmap display calcBehaviour)
+  void $ pure out # sink value (fmap display calcBehaviour)
 
-  UI.getBody win #+ [return out]
-                 #+ map UI.row (map (map return) buttons)
+  UI.getBody win
+    #+ [return out]
+    #+ map UI.row (map (map return) buttons)
 
   where
-    mkButton s = UI.input # set text s
-                          # set value s
-                          # set (attr "type") "button"
-                          # set (attr "style") "min-width: 50px"
+    mkButton s = UI.input
+      # set text s
+      # set value s
+      # set (attr "type") "button"
+      # set (attr "style") "min-width: 50px"
 
     buttonClicks :: [(Element, String)] -> Event String
     buttonClicks = foldr1 (UI.unionWith const) . map makeClick

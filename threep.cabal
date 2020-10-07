@@ -12,9 +12,8 @@ executable threep
   ghc-options:         -Wall -threaded -rtsopts "-with-rtsopts=-N"
   main-is:             Main.hs
   other-modules:       Calc
-  build-depends:       base ^>=4.12.0.0,
-                       threepenny-gui ^>=0.8.3.1,
-                       reactive-banana,
+  build-depends:       base >=4.8.0.0 && <4.15,
+                       threepenny-gui ^>=0.9.0.0,
                        data-default,
                        stm,
                        containers
